@@ -5,7 +5,7 @@ services:
     container_name: nginx2
     build: ./nginx/
     ports:
-      - 8888:80
+      - 8902:80
       # - 8333:443 #if need ssl
     volumes:
       - ./code/public:/srv/www/public
@@ -19,12 +19,12 @@ services:
     volumes:
       - ./code:/srv/www
       - ./php/configs:/usr/local/etc/php/conf.d
-  
+
   mysql:
     container_name: mysql2
     image: mysql:latest
     ports:
-      - 3333:3306
+      - 3902:3306
     volumes:
       - ./.mysql:/var/lib/mysql
     environment:
