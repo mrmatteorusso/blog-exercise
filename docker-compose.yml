@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   nginx:
-    container_name: nginx2
+    container_name: nginxblog
     build: ./nginx/
     ports:
       - 8902:80
@@ -14,14 +14,14 @@ services:
       - phpfpm
 
   phpfpm:
-    container_name: phpfpm2
+    container_name: phpfpmblog
     build: ./php/
     volumes:
       - ./code:/srv/www
       - ./php/configs:/usr/local/etc/php/conf.d
 
   mysql:
-    container_name: mysql2
+    container_name: mysqlblog
     image: mysql:latest
     ports:
       - 3902:3306
