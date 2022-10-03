@@ -36,7 +36,7 @@ try {
 
 
 
-$data = $pdo->query('SELECT * FROM blog')->fetchAll(PDO::FETCH_ASSOC);
+$data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -52,36 +52,6 @@ $data = $pdo->query('SELECT * FROM blog')->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <h1 class="mb-5">Super Blog</h1>
-
-    <form method="POST" class="mb-5">
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" placeholder="name@example.com">
-        </div>
-        <div class="form-group">
-            <label for="category">Category</label>
-            <select class="form-control" id="category">
-                <option>Choose</option>
-                <option>Music</option>
-                <option>Book</option>
-                <option>Cinema</option>
-                <option>Teathre</option>
-                <option>Other..</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="content">Content</label>
-            <textarea class="form-control" id="content" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="user_name">User Name</label>
-            <input type="text" class="form-control" id="user_name">
-        </div>
-        <button type="button" class="btn btn-primary px-3">Save</button>
-    </form>
-
-
     <table class="table">
         <thead class="thead-dark">
             <tr>
