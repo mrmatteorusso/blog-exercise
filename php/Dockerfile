@@ -10,6 +10,8 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && docker-php-ext-enable xdebug \
     && apk del -f .build-deps
 
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
