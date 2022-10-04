@@ -5,3 +5,8 @@
 body {
   margin: 1rem 5rem;
 }
+
+form {
+  margin: 1rem 8rem;
+  background-color: aqua;
+}

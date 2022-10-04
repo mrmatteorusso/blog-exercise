@@ -36,6 +36,8 @@ if (isset($_POST) && count($_POST) > 0) {
 
     $stmt->execute();
 
+    //header("location: ./index.php");
+
     //validate
 
 }
@@ -83,6 +85,7 @@ if (isset($_POST) && count($_POST) > 0) {
             <input type="text" class="form-control" id="user_name" name="user_name">
         </div>
         <input type="submit" class="btn btn-primary px-3" value=Save>
+        <a class="btn btn-danger" href="./index.php" type="button">Cancel</a>
     </form>
 
 </body>
