@@ -98,8 +98,8 @@ $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
                     <td><?php echo $data[$product]->category_name; ?></td>
                     <td><?php echo $data[$product]->user_name; ?></td>
                     <td><?php echo $data[$product]->created_at; ?></td>
-                    <td><?php echo empty($data[$product]->updated) && "-"; ?></td>
-                    <td><a href="./edit.php" type="button" class="btn btn-primary px-3">Edit</a></td>
+                    <td><?php echo (!empty($data[$product]->updated)) ? $data[$product]->updated : "-"; ?></td>
+                    <td><a href="./edit.php?id=<?php echo $data[$product]->id; ?>" type="button" class="btn btn-primary px-3">Edit</a></td>
                     <td><a href="./delete.php?id=<?php echo $data[$product]->id; ?>" type="button" class="btn btn-danger px-3">Delete</a></td>
                 </tr>
 
