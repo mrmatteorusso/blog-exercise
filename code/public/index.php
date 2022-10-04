@@ -36,7 +36,20 @@ try {
 
 
 
-$data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_ASSOC);
+$data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
+
+// echo "<pre>";
+// print_r($data);
+// echo "</pre>";
+
+// foreach ($data as $product) {
+//     echo $product['id'];
+//     // echo $product . " = " . $product['id'];
+//     // echo "</br>";
+//     // echo $attribute;
+//     echo "</br>";
+// }
+//exit;
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +65,13 @@ $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
+    <div>
+        <h1>Super blog</h1>
+    </div>
+    <div>
+        <a href="./create.php" class="btn btn-primary my-5 px-3">Add new blog</a>
+    </div>
+
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -72,15 +92,15 @@ $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_ASSOC);
 
             ?>
                 <tr>
-                    <th scope="row"><?php echo $data[$product]['id']; ?></th>
-                    <td><?php echo $data[$product]['title']; ?></td>
-                    <td><?php echo $data[$product]['content']; ?></td>
-                    <td><?php echo $data[$product]['category_name']; ?></td>
-                    <td><?php echo $data[$product]['user_name']; ?></td>
-                    <td><?php echo $data[$product]['created_at']; ?></td>
-                    <td><?php echo empty($data[$product]['updated']) ? "-" : $data[$product]['updated']; ?></td>
-                    <td><button type="button" class="btn btn-primary px-3">Edit</button></td>
-                    <td><button type="button" class="btn btn-danger px-3">Delete</button></td>
+                    <th scope="row"><?php echo $data[$product]->id; ?></th>
+                    <td><?php echo $data[$product]->title; ?></td>
+                    <td><?php echo $data[$product]->content; ?></td>
+                    <td><?php echo $data[$product]->category_name; ?></td>
+                    <td><?php echo $data[$product]->user_name; ?></td>
+                    <td><?php echo $data[$product]->created_at; ?></td>
+                    <td><?php echo empty($data[$product]->updated) && "-"; ?></td>
+                    <td><a href="./edit.php" type="button" class="btn btn-primary px-3">Edit</a></td>
+                    <td><a href="./delete.php?id=<?php echo $data[$product]->id; ?>" type="button" class="btn btn-danger px-3">Delete</a></td>
                 </tr>
 
             <?php
