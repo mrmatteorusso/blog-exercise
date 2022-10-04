@@ -1,5 +1,7 @@
 <?php
 
+require_once "./helpers.php";
+
 $host = 'mysqlblog';
 $db   = 'EXERCISE01';
 $user = 'root';
@@ -26,9 +28,21 @@ $query = "SELECT * FROM blogs WHERE id = ?";
 
 $data = $pdo->query('SELECT * FROM blogs')->fetch(PDO::FETCH_OBJ);
 
-print_r($data);
+display("this is the row!", $data);
 
-exit;
+
+$title = $data->title;
+$content = $data->content;
+$category = $data->category_name;
+$user_name = $data->user_name;
+
+echo $title;
+echo "</br>";
+echo $content;
+echo "</br>";
+echo $category;
+echo "</br>";
+
 
 
 ?>
@@ -51,12 +65,12 @@ exit;
     <form method="POST" class="mb-5">
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title">
+            <input type="text" class="form-control" id="title" name="title" value=<?php echo $title; ?>>
         </div>
         <div class="form-group">
             <label for="category">Category</label>
-            <select class="form-control" id="category" name="category">
-                <option>Choose</option>
+            <select class="form-control" id="category" name=<?php echo ucfirst($category); ?>>
+                <option value="" selected disabled hidden><?php echo ucfirst($category); ?></option>
                 <option>Music</option>
                 <option>Book</option>
                 <option>Cinema</option>
@@ -66,11 +80,11 @@ exit;
         </div>
         <div class="form-group">
             <label for="content">Content</label>
-            <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+            <textarea class="form-control" id="content" rows="3" name="content"><?php echo $content; ?></textarea>
         </div>
         <div class="form-group">
             <label for="user_name">User Name</label>
-            <input type="text" class="form-control" id="user_name" name="user_name">
+            <input type="text" class="form-control" id="user_name" name="user_name" value=<?php echo $user_name; ?> disabled>
         </div>
         <input type="submit" class="btn btn-primary px-3" value=Save>
         <a class="btn btn-danger" href="./index.php" type="button">Cancel</a>
@@ -84,12 +98,21 @@ exit;
 //----------------------------------------------------------------------------
 
 
-
 <?php
+//exit;
+
+$title = $_POST['title'];
+$content = $_POST['content'];
+//$category = $_POST['category_name'];
+//$user_name = $_POST['user_name'];
+$updated = date("Y-m-d H:i:s");
+
+
+display("this is POST", $_POST);
 $sql = "UPDATE blogs SET title=?, content=?, updated=? WHERE id=?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$title, $content, $updated, $id]);
 
 
 
-header("location: ./index.php");
+//header("location: ./index.php");
