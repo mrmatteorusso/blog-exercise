@@ -26,9 +26,12 @@ $id = $_GET['id'];
 
 $query = "SELECT * FROM blogs WHERE id = ?";
 
-$data = $pdo->query('SELECT * FROM blogs')->fetch(PDO::FETCH_OBJ);
+$stmt = $pdo->prepare($query);
+$stmt->execute([$id]);
+$data = $stmt->fetch(PDO::FETCH_OBJ);
+// $data = $stmt->fetch();
 
-display("this is the row!", $data);
+displayArray("this is the row!", $data);
 
 
 $title = $data->title;
@@ -36,12 +39,10 @@ $content = $data->content;
 $category = $data->category_name;
 $user_name = $data->user_name;
 
-echo $title;
-echo "</br>";
-echo $content;
-echo "</br>";
-echo $category;
-echo "</br>";
+displayString("this is title");
+displayString($title);
+
+
 
 
 
@@ -65,11 +66,11 @@ echo "</br>";
     <form method="POST" class="mb-5">
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" name="title" value=<?php echo $title; ?>>
+            <input type="text" class="form-control" id="title" name="title" value="<?php echo $title; ?>">
         </div>
         <div class="form-group">
             <label for="category">Category</label>
-            <select class="form-control" id="category" name=<?php echo ucfirst($category); ?>>
+            <select class="form-control" id="category" name="category">
                 <option value="" selected disabled hidden><?php echo ucfirst($category); ?></option>
                 <option>Music</option>
                 <option>Book</option>
@@ -84,7 +85,7 @@ echo "</br>";
         </div>
         <div class="form-group">
             <label for="user_name">User Name</label>
-            <input type="text" class="form-control" id="user_name" name="user_name" value=<?php echo $user_name; ?> disabled>
+            <input type="text" class="form-control" id="user_name" name="user_name" value="<?php echo $user_name; ?>" disabled>
         </div>
         <input type="submit" class="btn btn-primary px-3" value=Save>
         <a class="btn btn-danger" href="./index.php" type="button">Cancel</a>
@@ -95,12 +96,13 @@ echo "</br>";
 </html>
 
 
-//----------------------------------------------------------------------------
+<!------------------------------------------------------------------------------ -->
 
 
 <?php
 //exit;
 
+displayArray("this is POST", $_POST);
 $title = $_POST['title'];
 $content = $_POST['content'];
 //$category = $_POST['category_name'];
@@ -108,11 +110,16 @@ $content = $_POST['content'];
 $updated = date("Y-m-d H:i:s");
 
 
-display("this is POST", $_POST);
 $sql = "UPDATE blogs SET title=?, content=?, updated=? WHERE id=?";
 $stmt = $pdo->prepare($sql);
-$stmt->execute([$title, $content, $updated, $id]);
 
+$url = "./index.php";
 
+//header('location= ./index.php');
+// if (headers_sent()) {
+//     $string = '<script type="text/javascript">';
+//     $string .= 'window.location = "' . $url . '"';
+//     $string .= '</script>';
 
-//header("location: ./index.php");
+//     echo $string;
+// }
