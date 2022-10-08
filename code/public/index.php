@@ -21,8 +21,16 @@ try {
 }
 
 
+$users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_ASSOC);
 $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
 $categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
+
+$assoc_users = [];
+foreach ($users as $user) {
+
+    $assoc_users[$user['id']] = $user['user_name'];
+}
+
 
 $assoc_categories = [];
 foreach ($categories as $category) {
@@ -74,7 +82,7 @@ foreach ($categories as $category) {
                     <td><?php echo $data[$product]->title; ?></td>
                     <td><?php echo $data[$product]->content; ?></td>
                     <td><?php echo $assoc_categories[$data[$product]->category_id]; ?></td>
-                    <td><?php echo $data[$product]->user_name; ?></td>
+                    <td><?php echo $assoc_users[$data[$product]->user_id]; ?></td>
                     <td><?php echo $data[$product]->created_at; ?></td>
                     <td><?php echo (!empty($data[$product]->updated)) ? $data[$product]->updated : "-"; ?></td>
                     <td><a href="./edit.php?id=<?php echo $data[$product]->id; ?>" type="button" class="btn btn-primary px-3">Edit</a></td>
