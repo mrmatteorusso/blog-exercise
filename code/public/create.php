@@ -1,5 +1,7 @@
 <?php
 
+require_once("./helpers.php");
+
 
 $host = 'mysqlblog';
 $db   = 'EXERCISE01';
@@ -20,26 +22,25 @@ try {
 }
 
 
-if (isset($_POST) && count($_POST) > 0) {
-    echo "<pre>";
-    print_r($_POST);
-    echo "</pre>";
+$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_OBJ);
 
-    $query = "INSERT INTO blogs (title, content, category_name, user_name, created_at) 
-    values (:title, :content, :category_name, :user_name, NOW()) ";
+
+
+if (isset($_POST) && count($_POST) > 0) {
+
+    $query = "INSERT INTO blogs (title, content, category_id, user_name, created_at) 
+    values (:title, :content, :category_id, :user_name, NOW()) ";
 
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':title', $_POST['title']);
     $stmt->bindParam(':content', $_POST['content']);
-    $stmt->bindParam(':category_name', $_POST['category']);
+    $stmt->bindParam(':category_id', $_POST['category']);
     $stmt->bindParam(':user_name', $_POST['user_name']);
-
     $stmt->execute();
 
-    //header("location: ./index.php");
+    header("location: ./index.php");
 
     //validate
-
 }
 ?>
 
@@ -68,12 +69,14 @@ if (isset($_POST) && count($_POST) > 0) {
         <div class="form-group">
             <label for="category">Category</label>
             <select class="form-control" id="category" name="category">
-                <option>Choose</option>
-                <option>Music</option>
-                <option>Book</option>
-                <option>Cinema</option>
-                <option>Teathre</option>
-                <option>Other..</option>
+                <?php
+                foreach ($categories as $category) {
+                ?>
+
+                    <option value="<?= $category->id ?>"> <?= $category->title ?></option>
+                <?php
+                }
+                ?>
             </select>
         </div>
         <div class="form-group">

@@ -1,20 +1,6 @@
 <?php
 
-//phpinfo();
-
-
-// $user = 'gssdvq1oz8bvlpvy';
-// $password = 'y6r57fswz6owh5op';
-// $host = 'ltnya0pnki2ck9w8.chr7pe7iynqr.eu-west-1.rds.amazonaws.com';
-// $dbName = 'p5t3d4ceejfhd8q6';
-
-// $database = new PDO("mysql:host=$host;dbname=$dbName;", $user, $password, [
-//     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-//     PDO::ATTR_PERSISTENT => true
-// ]);
-
-// echo "ciao2";
-// exit;
+require_once("./helpers.php");
 
 $host = 'mysqlblog';
 $db   = 'EXERCISE01';
@@ -35,21 +21,14 @@ try {
 }
 
 
-
 $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
+$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
 
-// echo "<pre>";
-// print_r($data);
-// echo "</pre>";
+$assoc_categories = [];
+foreach ($categories as $category) {
 
-// foreach ($data as $product) {
-//     echo $product['id'];
-//     // echo $product . " = " . $product['id'];
-//     // echo "</br>";
-//     // echo $attribute;
-//     echo "</br>";
-// }
-//exit;
+    $assoc_categories[$category['id']] = $category['title'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,13 +68,12 @@ $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
 
         <tbody>
             <?php foreach ($data as $product => $attribute) {
-
             ?>
                 <tr>
                     <th scope="row"><?php echo $data[$product]->id; ?></th>
                     <td><?php echo $data[$product]->title; ?></td>
                     <td><?php echo $data[$product]->content; ?></td>
-                    <td><?php echo $data[$product]->category_name; ?></td>
+                    <td><?php echo $assoc_categories[$data[$product]->category_id]; ?></td>
                     <td><?php echo $data[$product]->user_name; ?></td>
                     <td><?php echo $data[$product]->created_at; ?></td>
                     <td><?php echo (!empty($data[$product]->updated)) ? $data[$product]->updated : "-"; ?></td>
@@ -110,7 +88,6 @@ $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
         </tbody>
 
     </table>
-
 </body>
 
 </html>

@@ -7,6 +7,7 @@ $db   = 'EXERCISE01';
 $user = 'root';
 $pass = 'password';
 $charset = 'utf8mb4';
+$id = $_GET['id'];
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
@@ -20,30 +21,38 @@ try {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
 
+$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
 
+$assoc_categories = [];
+foreach ($categories as $category) {
+    $assoc_categories[$category['id']] = $category['title'];
+}
 
-$id = $_GET['id'];
+if (!empty($_POST)) {
+
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $category = $_POST['category_id'];
+    $user_name = $_POST['user_name'];
+    $updated = date("Y-m-d H:i:s");
+
+    $sql = "UPDATE blogs SET title=?, content=?, user_name=?, category_id=?, updated=? WHERE id=?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$title, $content, $user_name, $category, $updated, $id]);
+    header("location: ./index.php");
+}
+
 
 $query = "SELECT * FROM blogs WHERE id = ?";
 
 $stmt = $pdo->prepare($query);
 $stmt->execute([$id]);
 $data = $stmt->fetch(PDO::FETCH_OBJ);
-// $data = $stmt->fetch();
-
-displayArray("this is the row!", $data);
-
 
 $title = $data->title;
 $content = $data->content;
-$category = $data->category_name;
+$category = $data->category_id;
 $user_name = $data->user_name;
-
-displayString("this is title");
-displayString($title);
-
-
-
 
 
 ?>
@@ -61,8 +70,6 @@ displayString($title);
 
 <body>
     <h1 class="mb-5">Add Post</h1>
-
-
     <form method="POST" class="mb-5">
         <div class="form-group">
             <label for="title">Title</label>
@@ -70,13 +77,17 @@ displayString($title);
         </div>
         <div class="form-group">
             <label for="category">Category</label>
-            <select class="form-control" id="category" name="category">
-                <option value="" selected disabled hidden><?php echo ucfirst($category); ?></option>
-                <option>Music</option>
-                <option>Book</option>
-                <option>Cinema</option>
-                <option>Teathre</option>
-                <option>Other..</option>
+            <select class="form-control" id="category" name="category_id">
+                <option value="" selected disabled hidden><?php echo ucfirst($assoc_categories[$category]); ?></option>
+
+                <?php
+                foreach ($categories as $category) {
+                ?>
+                    <option value="<?= $category['id'] ?>"> <?= $category['title'] ?></option>
+
+                <?php
+                }
+                ?>
             </select>
         </div>
         <div class="form-group">
@@ -85,7 +96,7 @@ displayString($title);
         </div>
         <div class="form-group">
             <label for="user_name">User Name</label>
-            <input type="text" class="form-control" id="user_name" name="user_name" value="<?php echo $user_name; ?>" disabled>
+            <input type="text" class="form-control" id="user_name" name="user_name" value="<?php echo $user_name; ?>">
         </div>
         <input type="submit" class="btn btn-primary px-3" value=Save>
         <a class="btn btn-danger" href="./index.php" type="button">Cancel</a>
@@ -94,32 +105,3 @@ displayString($title);
 </body>
 
 </html>
-
-
-<!------------------------------------------------------------------------------ -->
-
-
-<?php
-//exit;
-
-displayArray("this is POST", $_POST);
-$title = $_POST['title'];
-$content = $_POST['content'];
-//$category = $_POST['category_name'];
-//$user_name = $_POST['user_name'];
-$updated = date("Y-m-d H:i:s");
-
-
-$sql = "UPDATE blogs SET title=?, content=?, updated=? WHERE id=?";
-$stmt = $pdo->prepare($sql);
-
-$url = "./index.php";
-
-//header('location= ./index.php');
-// if (headers_sent()) {
-//     $string = '<script type="text/javascript">';
-//     $string .= 'window.location = "' . $url . '"';
-//     $string .= '</script>';
-
-//     echo $string;
-// }

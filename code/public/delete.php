@@ -18,11 +18,7 @@ try {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
 
-
-
 $id = $_GET['id'];
-
-
 
 $sql = "DELETE FROM blogs WHERE id = ?";
 

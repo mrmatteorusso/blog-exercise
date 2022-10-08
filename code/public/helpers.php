@@ -10,9 +10,21 @@ function displayArray($string, $array)
     echo "</pre>";
 }
 
+function displayArrayExit($string, $array)
+{
+    displayArray($string, $array);
+    exit;
+}
+
 
 function displayString($string)
 {
     echo $string;
     echo "</br>";
+}
+
+function displayStringExit($string)
+{
+    displayStringExit($string);
+    exit;
 }
