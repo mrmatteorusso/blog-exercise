@@ -2,33 +2,8 @@
 
 require_once("./helpers.php");
 
-$host = 'mysqlblog';
-$db   = 'EXERCISE01';
-$user = 'root';
-$pass = 'password';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
-
-
 $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
-$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
 
-$assoc_categories = [];
-foreach ($categories as $category) {
-
-    $assoc_categories[$category['id']] = $category['title'];
-}
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +49,7 @@ foreach ($categories as $category) {
                     <td><?php echo $data[$product]->title; ?></td>
                     <td><?php echo $data[$product]->content; ?></td>
                     <td><?php echo $assoc_categories[$data[$product]->category_id]; ?></td>
-                    <td><?php echo $data[$product]->user_name; ?></td>
+                    <td><?php echo $assoc_users[$data[$product]->user_id]; ?></td>
                     <td><?php echo $data[$product]->created_at; ?></td>
                     <td><?php echo (!empty($data[$product]->updated)) ? $data[$product]->updated : "-"; ?></td>
                     <td><a href="./edit.php?id=<?php echo $data[$product]->id; ?>" type="button" class="btn btn-primary px-3">Edit</a></td>
@@ -94,17 +69,3 @@ foreach ($categories as $category) {
 
 
 <?php
-//my_sqli
-// $host = 'mysqlblog';
-// $db = 'test';
-// $user = 'root';
-// $pass = 'password';
-
-// $connection = mysqli_connect($host, $user, $pass, $db);
-// //echo $connection;
-// echo "ciao";
-// exit;
-// $query = "SELECT * FROM blog";
-// $mysqli_query = mysqli_query($connection, $query);
-
-// echo $mysqli_query;
