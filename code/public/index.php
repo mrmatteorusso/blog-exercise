@@ -1,6 +1,11 @@
 <?php
 
 require_once("./helpers.php");
+require_once("./Database.php");
+
+$obj = new Database;
+
+$obj->connect();
 
 $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
 
