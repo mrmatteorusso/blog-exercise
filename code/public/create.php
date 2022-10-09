@@ -7,7 +7,6 @@ $categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_OBJ);
 $users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_OBJ);
 
 
-
 if (isset($_POST) && count($_POST) > 0) {
 
     $query2 = "INSERT INTO blogs (title, content, category_id, user_id, created_at) 
