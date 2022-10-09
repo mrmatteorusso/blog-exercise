@@ -2,41 +2,8 @@
 
 require_once("./helpers.php");
 
-$host = 'mysqlblog';
-$db   = 'EXERCISE01';
-$user = 'root';
-$pass = 'password';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
-
-
-$users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_ASSOC);
 $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
-$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
 
-$assoc_users = [];
-foreach ($users as $user) {
-
-    $assoc_users[$user['id']] = $user['user_name'];
-}
-
-
-$assoc_categories = [];
-foreach ($categories as $category) {
-
-    $assoc_categories[$category['id']] = $category['title'];
-}
 ?>
 
 <!DOCTYPE html>
@@ -102,17 +69,3 @@ foreach ($categories as $category) {
 
 
 <?php
-//my_sqli
-// $host = 'mysqlblog';
-// $db = 'test';
-// $user = 'root';
-// $pass = 'password';
-
-// $connection = mysqli_connect($host, $user, $pass, $db);
-// //echo $connection;
-// echo "ciao";
-// exit;
-// $query = "SELECT * FROM blog";
-// $mysqli_query = mysqli_query($connection, $query);
-
-// echo $mysqli_query;
