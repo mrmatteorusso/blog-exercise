@@ -1,6 +1,7 @@
 <?php
 require_once "./helpers.php";
 
+$pdo = connect();
 $id = $_GET['id'];
 
 $sql = "DELETE FROM blogs WHERE id = ?";

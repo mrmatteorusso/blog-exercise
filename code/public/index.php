@@ -2,7 +2,15 @@
 
 require_once("./helpers.php");
 
-$data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
+$pdo = connect(); //needed?
+
+$users = fetchUsers();
+$assoc_users = transformIntoAssocArray($users, "id", "user_name");
+
+$categories = fecthCategories();
+$assoc_categories = transformIntoAssocArray($categories, "id", "title");
+
+$data = fetchBlogs();
 
 ?>
 

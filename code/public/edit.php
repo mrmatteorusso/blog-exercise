@@ -12,31 +12,25 @@ if (!empty($_POST)) {
     $user_id = $_POST['user_id'];
     $updated = date("Y-m-d H:i:s");
 
-    $sql = "UPDATE blogs SET title=?, content=?, category_id=?, user_id=?, updated=? WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$title, $content, $category, $user_id, $updated, $id]);
+    updateBlog($title, $content, $category, $user_id, $updated, $id);
 
     header("location: ./index.php");
 }
+$users = fetchUsers();
+$assoc_users = transformIntoAssocArray($users, "id", "user_name");
 
-$query = "SELECT * FROM blogs WHERE id = ?";
+$categories = fecthCategories();
+$assoc_categories = transformIntoAssocArray($categories, "id", "title");
 
-$stmt = $pdo->prepare($query);
-$stmt->execute([$id]);
-$data = $stmt->fetch(PDO::FETCH_OBJ);
+$data = fetchBlog($id);
 
 $title = $data->title;
 $content = $data->content;
 $category_id = $data->category_id;
+//displayStringExit("categry id", $category_id);
 $user_id = $data->user_id;
 
-$query_id_users = "SELECT * FROM users WHERE id = ?";
-$stmt2 = $pdo->prepare($query_id_users);
-
-$stmt2->execute([$user_id]);
-
-$user = $stmt2->fetch(PDO::FETCH_ASSOC);
-
+$user = fetchUser($user_id);
 
 ?>
 <!DOCTYPE html>

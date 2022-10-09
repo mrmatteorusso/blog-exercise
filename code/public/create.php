@@ -2,26 +2,12 @@
 
 require_once("./helpers.php");
 
-
-$categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_OBJ);
-$users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_OBJ);
-
+$categories = fecthCategories();
+$users = fetchUsers();
 
 if (isset($_POST) && count($_POST) > 0) {
-
-    $query2 = "INSERT INTO blogs (title, content, category_id, user_id, created_at) 
-    values (:title, :content, :category_id, :user_id, NOW()) ";
-
-    $stmt = $pdo->prepare($query2);
-    $stmt->bindParam(':title', $_POST['title']);
-    $stmt->bindParam(':content', $_POST['content']);
-    $stmt->bindParam(':category_id', $_POST['category']);
-    $stmt->bindParam(':user_id', $_POST['user_id']);
-    $stmt->execute();
-
+    insertIntoBlogs();
     header("location: ./index.php");
-
-    //validate
 }
 ?>
 
@@ -54,7 +40,7 @@ if (isset($_POST) && count($_POST) > 0) {
                 foreach ($categories as $category) {
                 ?>
 
-                    <option value="<?= $category->id ?>"> <?= $category->title ?></option>
+                    <option value="<?= $category['id'] ?>"> <?= $category['title'] ?></option>
                 <?php
                 }
                 ?>
@@ -71,7 +57,7 @@ if (isset($_POST) && count($_POST) > 0) {
                 foreach ($users as $user) {
                 ?>
 
-                    <option value="<?= $user->id ?>"> <?= $user->user_name ?></option>
+                    <option value="<?= $user['id'] ?>"> <?= $user['user_name'] ?></option>
                 <?php
                 }
                 ?>
