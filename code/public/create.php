@@ -2,8 +2,8 @@
 
 require_once("./helpers.php");
 
-$categories = fecthCategories();
-$users = fetchUsers();
+$categories = fetchTable("categories");
+$users = fetchTable("users", $pdo = PDO::FETCH_OBJ);
 
 if (isset($_POST) && count($_POST) > 0) {
     insertIntoBlogs();
@@ -57,7 +57,7 @@ if (isset($_POST) && count($_POST) > 0) {
                 foreach ($users as $user) {
                 ?>
 
-                    <option value="<?= $user['id'] ?>"> <?= $user['user_name'] ?></option>
+                    <option value="<?= $user->id ?>"> <?= $user->user_name ?></option>
                 <?php
                 }
                 ?>

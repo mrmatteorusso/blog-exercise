@@ -4,13 +4,15 @@ require_once("./helpers.php");
 
 $pdo = connect(); //needed?
 
-$users = fetchUsers();
+
+$users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_ASSOC);
+$users = fetchTable("users");
 $assoc_users = transformIntoAssocArray($users, "id", "user_name");
 
-$categories = fecthCategories();
+$categories = fetchTable("categories");
 $assoc_categories = transformIntoAssocArray($categories, "id", "title");
 
-$data = fetchBlogs();
+$data = fetchTable("blogs", $pdo = PDO::FETCH_OBJ);
 
 ?>
 
@@ -32,6 +34,7 @@ $data = fetchBlogs();
     </div>
     <div>
         <a href="./create.php" class="btn btn-primary my-5 px-3">Add new blog</a>
+        <a href="./create_user.php" class="btn btn-primary my-5 px-3">Add new user</a>
     </div>
 
     <table class="table">
@@ -66,7 +69,6 @@ $data = fetchBlogs();
 
             <?php
             }
-
             ?>
         </tbody>
 

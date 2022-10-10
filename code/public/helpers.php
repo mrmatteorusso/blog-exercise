@@ -8,7 +8,7 @@ function test()
     exit;
 }
 
-
+$dbExists = false;
 function connect()
 {
 
@@ -26,7 +26,14 @@ function connect()
     ];
 
     try {
-
+        // if(!$dbExists){
+        //     $dbExists = checkifItExists();
+        // }
+        // if(!$dbExists){
+        //     createDB();
+        //     createTable();
+        //     $dbExists=true;
+        // }
         $pdo = new PDO($dsn, $user, $pass, $options);
         return $pdo;
     } catch (\PDOException $e) {
@@ -35,49 +42,27 @@ function connect()
 }
 
 
-function fetchUsers()
-{
-    $pdo = connect();
-    $users = $pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_ASSOC);
-    return $users;
-}
 
-function fecthCategories()
+function fetchTable($table_name, $pdo_type = PDO::FETCH_ASSOC)
 {
     $pdo = connect();
-    $categories = $pdo->query('SELECT * FROM categories')->fetchAll(PDO::FETCH_ASSOC);
-    return $categories;
-}
-
-function fetchBlogs()
-{
-    $pdo = connect();
-    $data = $pdo->query('SELECT * FROM blogs')->fetchAll(PDO::FETCH_OBJ);
+    $data = $pdo->query('SELECT * FROM ' . $table_name)->fetchAll($pdo_type);
     return $data;
 }
 
-function fetchBlog($id)
+
+//the following 2
+function fetchSingleRow($table, $id, $pdo_type = PDO::FETCH_ASSOC)
 {
     $pdo = connect();
-    $query = "SELECT * FROM blogs WHERE id = ?";
+    $query = "SELECT * FROM " . $table . " WHERE id = ?";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute([$id]);
-    $data = $stmt->fetch(PDO::FETCH_OBJ);
+    $data = $stmt->fetch($pdo_type);
     return $data;
 }
 
-function fetchUser($id)
-{
-    $pdo = connect();
-    $query_id_users = "SELECT * FROM users WHERE id = ?";
-    $stmt2 = $pdo->prepare($query_id_users);
-
-    $stmt2->execute([$id]);
-
-    $user = $stmt2->fetch(PDO::FETCH_ASSOC);
-    return $user;
-}
 
 function transformIntoAssocArray($oldArries, $column1, $column2)
 {
@@ -101,6 +86,17 @@ function insertIntoBlogs()
     $stmt->bindParam(':content', $_POST['content']);
     $stmt->bindParam(':category_id', $_POST['category']);
     $stmt->bindParam(':user_id', $_POST['user_id']);
+    $stmt->execute();
+}
+
+function insertIntoUsers()
+{
+    $pdo = connect();
+
+    $query = "INSERT INTO users (user_name, created_at) 
+    values (:user_name, NOW()) ";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':user_name', $_POST['user_name']);
     $stmt->execute();
 }
 

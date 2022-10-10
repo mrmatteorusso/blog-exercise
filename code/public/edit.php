@@ -16,21 +16,20 @@ if (!empty($_POST)) {
 
     header("location: ./index.php");
 }
-$users = fetchUsers();
+$users = fetchTable("users");
 $assoc_users = transformIntoAssocArray($users, "id", "user_name");
 
-$categories = fecthCategories();
+$categories = fetchTable("categories");
 $assoc_categories = transformIntoAssocArray($categories, "id", "title");
 
-$data = fetchBlog($id);
+$data = fetchSingleRow("blogs", $id);
 
-$title = $data->title;
-$content = $data->content;
-$category_id = $data->category_id;
-//displayStringExit("categry id", $category_id);
-$user_id = $data->user_id;
+$title = $data['title'];
+$content = $data['content'];
+$category_id = $data['category_id'];
+$user_id = $data['user_id'];
 
-$user = fetchUser($user_id);
+$user = fetchSingleRow("users", $user_id, $pdo_type = PDO::FETCH_OBJ);
 
 ?>
 <!DOCTYPE html>
